@@ -1,0 +1,21 @@
+name: Build and Publish Images to Docker Hub
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build the Docker image
+        run: docker build ./api/ -t justoni122/devops-qr-code-project:latest
+
+      - name: Push image to Docker Hub
+        run: docker push justoni122/devops-qr-code-project:latest
